@@ -1,0 +1,55 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+<script src="jquery-3.6.4.min.js"></script>
+<script>
+    
+    $(document).ready(function(){
+        var result = get_query();
+        console.log(result)
+        if(result.valid == "Done")
+        {
+            window.alert("Data Added Successfully")
+        }
+
+
+        $("#update_user").submit(function(event){
+
+            event.preventDefault();
+
+            var unindexed_array = $(this).serializeArray();
+            var data ={};
+
+
+            $.map(unindexed_array,function(n,i){
+                data[n['name']] = n['value']
+            })
+
+            console.log(data);
+
+            var request ={
+                "url":`http://localhost:8080/users/update/${data.id}`,
+                "method":"PUT",
+                "data":data
+
+            }
+
+            $.ajax(request).done(function(response){
+                alert("Data Updated Succesfully !!!")
+            })
+        })
+});
+ 
+function get_query(){
+    var url = document.location.href;
+    var qs = url.substring(url.indexOf('?') + 1).split('&');
+    for(var i = 0, result = {}; i < qs.length; i++){
+        qs[i] = qs[i].split('=');
+        result[qs[i][0]] = decodeURIComponent(qs[i][1]);
+    }
+    return result;
+}
+
+
+</script>
+</body>
+</html>
